@@ -1,0 +1,3589 @@
+<!doctype html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ContentCraft</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script src="/_sdk/element_sdk.js"></script>
+    <style>
+      body {
+        box-sizing: border-box;
+        font-family: "Plus Jakarta Sans", sans-serif;
+      }
+      .font-mono {
+        font-family: "JetBrains Mono", monospace;
+      }
+
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: rgba(15, 23, 42, 0.1);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgba(99, 102, 241, 0.3);
+        border-radius: 3px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgba(99, 102, 241, 0.5);
+      }
+
+      /* Gradient backgrounds */
+      .gradient-mesh {
+        background:
+          radial-gradient(
+            ellipse at 20% 20%,
+            rgba(99, 102, 241, 0.15) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            ellipse at 80% 80%,
+            rgba(168, 85, 247, 0.1) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            ellipse at 50% 50%,
+            rgba(6, 182, 212, 0.08) 0%,
+            transparent 50%
+          );
+      }
+
+      .glass-card {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+      }
+
+      .glass-dark {
+        background: rgba(15, 23, 42, 0.95);
+        backdrop-filter: blur(20px);
+      }
+
+      /* Animations */
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      @keyframes pulse-ring {
+        0% {
+          transform: scale(0.95);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(1.3);
+          opacity: 0;
+        }
+      }
+
+      @keyframes gradient-shift {
+        0%,
+        100% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+      }
+
+      @keyframes shimmer {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(100%);
+        }
+      }
+
+      @keyframes typing {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.3;
+        }
+      }
+
+      @keyframes score-fill {
+        from {
+          stroke-dashoffset: 251;
+        }
+      }
+
+      @keyframes fade-up {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes scale-in {
+        from {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .animate-float {
+        animation: float 6s ease-in-out infinite;
+      }
+
+      .animate-float-delayed {
+        animation: float 6s ease-in-out infinite;
+        animation-delay: 2s;
+      }
+
+      .animate-gradient {
+        background-size: 200% 200%;
+        animation: gradient-shift 8s ease infinite;
+      }
+
+      .animate-shimmer {
+        animation: shimmer 2s infinite;
+      }
+
+      .animate-typing {
+        animation: typing 1s ease-in-out infinite;
+      }
+
+      .animate-fade-up {
+        animation: fade-up 0.5s ease-out forwards;
+      }
+
+      .animate-scale-in {
+        animation: scale-in 0.3s ease-out forwards;
+      }
+
+      /* Score ring animation */
+      .score-ring {
+        stroke-dasharray: 251;
+        stroke-dashoffset: 251;
+        transform: rotate(-90deg);
+        transform-origin: center;
+      }
+
+      .score-ring.animated {
+        animation: score-fill 1.5s ease-out forwards;
+      }
+
+      /* Tab transitions */
+      .tab-indicator {
+        transition:
+          transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+          width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      /* Button styles */
+      .btn-primary {
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        transition: all 0.3s ease;
+      }
+
+      .btn-primary:hover {
+        background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 40px -10px rgba(99, 102, 241, 0.5);
+      }
+
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(99, 102, 241, 0.2);
+        transition: all 0.3s ease;
+      }
+
+      .btn-secondary:hover {
+        background: rgba(99, 102, 241, 0.1);
+        border-color: rgba(99, 102, 241, 0.4);
+      }
+
+      /* Progress bar */
+      .progress-bar {
+        background: linear-gradient(90deg, #6366f1, #8b5cf6, #06b6d4);
+        background-size: 200% 100%;
+        animation: gradient-shift 2s linear infinite;
+      }
+
+      /* Tooltip */
+      .tooltip {
+        position: relative;
+      }
+
+      .tooltip::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 6px 12px;
+        background: #1e293b;
+        color: white;
+        font-size: 12px;
+        border-radius: 6px;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition:
+          opacity 0.2s,
+          transform 0.2s;
+      }
+
+      .tooltip:hover::after {
+        opacity: 1;
+        transform: translateX(-50%) translateY(-4px);
+      }
+
+      /* Input focus styles */
+      .input-focus {
+        transition: all 0.3s ease;
+      }
+
+      .input-focus:focus {
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        border-color: #6366f1;
+      }
+
+      /* Card hover effect */
+      .hover-lift {
+        transition: all 0.3s ease;
+      }
+
+      .hover-lift:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Navigation link underline */
+      .nav-link {
+        position: relative;
+      }
+
+      .nav-link::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #6366f1, #8b5cf6);
+        transition: width 0.3s ease;
+      }
+
+      .nav-link:hover::after {
+        width: 100%;
+      }
+
+      /* Processing animation */
+      .processing-dot {
+        animation: typing 1.4s infinite ease-in-out both;
+      }
+
+      .processing-dot:nth-child(1) {
+        animation-delay: -0.32s;
+      }
+      .processing-dot:nth-child(2) {
+        animation-delay: -0.16s;
+      }
+      .processing-dot:nth-child(3) {
+        animation-delay: 0s;
+      }
+
+      /* Mobile menu */
+      .mobile-menu {
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+      }
+
+      .mobile-menu.open {
+        transform: translateX(0);
+      }
+
+      /* Modal backdrop */
+      .modal-backdrop {
+        background: rgba(15, 23, 42, 0.7);
+        backdrop-filter: blur(4px);
+      }
+
+      /* Feature card glow */
+      .feature-glow {
+        position: relative;
+      }
+
+      .feature-glow::before {
+        content: "";
+        position: absolute;
+        inset: -1px;
+        background: linear-gradient(
+          135deg,
+          rgba(99, 102, 241, 0.3),
+          rgba(168, 85, 247, 0.3),
+          rgba(6, 182, 212, 0.3)
+        );
+        border-radius: inherit;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: -1;
+      }
+
+      .feature-glow:hover::before {
+        opacity: 1;
+      }
+
+      /* Pricing card popular */
+      .pricing-popular {
+        background: linear-gradient(
+          135deg,
+          rgba(99, 102, 241, 0.05),
+          rgba(168, 85, 247, 0.05)
+        );
+        border: 2px solid rgba(99, 102, 241, 0.3);
+      }
+
+      /* History item */
+      .history-item {
+        border-left: 3px solid transparent;
+        transition: all 0.2s ease;
+      }
+
+      .history-item:hover {
+        border-left-color: #6366f1;
+        background: rgba(99, 102, 241, 0.05);
+      }
+    </style>
+    <style>
+      @view-transition {
+        navigation: auto;
+      }
+    </style>
+    <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  </head>
+  <body class="h-full bg-slate-50 text-slate-800 overflow-auto">
+    <div id="app" class="min-h-full">
+      <!-- Navigation -->
+      <nav
+        id="navbar"
+        class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+      >
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex items-center justify-between h-16 lg:h-20">
+            <!-- Logo -->
+            <div
+              class="flex items-center gap-2 cursor-pointer"
+              onclick="navigateTo('home')"
+            >
+              <div
+                class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/30"
+              >
+                <svg
+                  class="w-6 h-6 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewbox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                  />
+                </svg>
+              </div>
+              <span
+                id="brand-name"
+                class="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent"
+                >ContentCraft</span
+              >
+            </div>
+            <!-- Desktop Navigation -->
+            <div class="hidden lg:flex items-center gap-8">
+              <button
+                onclick="navigateTo('home')"
+                class="nav-link text-slate-600 hover:text-slate-900 font-medium transition-colors"
+              >
+                Home
+              </button>
+              <button
+                onclick="navigateTo('dashboard')"
+                class="nav-link text-slate-600 hover:text-slate-900 font-medium transition-colors"
+              >
+                Dashboard
+              </button>
+              <button
+                onclick="navigateTo('pricing')"
+                class="nav-link text-slate-600 hover:text-slate-900 font-medium transition-colors"
+              >
+                Pricing
+              </button>
+              <button
+                onclick="navigateTo('history')"
+                class="nav-link text-slate-600 hover:text-slate-900 font-medium transition-colors"
+              >
+                History
+              </button>
+            </div>
+            <!-- Auth Buttons -->
+            <div class="hidden lg:flex items-center gap-3">
+              <button
+                id="login-nav-btn"
+                onclick="showLoginModal()"
+                class="px-4 py-2 text-slate-600 hover:text-slate-900 font-medium transition-colors"
+              >
+                Sign In
+              </button>
+              <button
+                id="signup-nav-btn"
+                onclick="showSignupModal()"
+                class="btn-primary px-5 py-2.5 text-white font-semibold rounded-xl shadow-lg"
+              >
+                Get Started
+              </button>
+              <!-- User Menu (Hidden by default) -->
+              <div id="user-menu" class="hidden relative">
+                <button
+                  onclick="toggleUserDropdown()"
+                  class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-100 transition-colors"
+                >
+                  <div
+                    class="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-semibold text-sm"
+                  >
+                    <span id="user-avatar">JD</span>
+                  </div>
+                  <span
+                    id="user-display-name"
+                    class="font-medium text-slate-700"
+                    >John Doe</span
+                  >
+                  <svg
+                    class="w-4 h-4 text-slate-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewbox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+                <div
+                  id="user-dropdown"
+                  class="hidden absolute right-0 top-full mt-2 w-56 bg-white rounded-xl shadow-xl border border-slate-200 py-2 animate-scale-in"
+                >
+                  <div class="px-4 py-3 border-b border-slate-100">
+                    <p
+                      class="text-sm font-semibold text-slate-800"
+                      id="dropdown-name"
+                    >
+                      John Doe
+                    </p>
+                    <p class="text-xs text-slate-500" id="dropdown-email">
+                      john@example.com
+                    </p>
+                  </div>
+                  <button
+                    onclick="navigateTo('account')"
+                    class="w-full px-4 py-2.5 text-left text-sm text-slate-600 hover:bg-slate-50 flex items-center gap-3"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewbox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                      />
+                    </svg>
+                    Account Settings
+                  </button>
+                  <button
+                    onclick="navigateTo('history')"
+                    class="w-full px-4 py-2.5 text-left text-sm text-slate-600 hover:bg-slate-50 flex items-center gap-3"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewbox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    Analysis History
+                  </button>
+                  <div class="border-t border-slate-100 mt-2 pt-2">
+                    <button
+                      onclick="logout()"
+                      class="w-full px-4 py-2.5 text-left text-sm text-red-600 hover:bg-red-50 flex items-center gap-3"
+                    >
+                      <svg
+                        class="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewbox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                        />
+                      </svg>
+                      Sign Out
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Mobile Menu Button -->
+            <button
+              onclick="toggleMobileMenu()"
+              class="lg:hidden p-2 rounded-lg hover:bg-slate-100 transition-colors"
+            >
+              <svg
+                class="w-6 h-6 text-slate-700"
+                fill="none"
+                stroke="currentColor"
+                viewbox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </nav>
+      <!-- Mobile Menu -->
+      <div
+        id="mobile-menu"
+        class="mobile-menu fixed inset-y-0 right-0 w-80 max-w-full bg-white shadow-2xl z-50 lg:hidden"
+      >
+        <div class="flex flex-col h-full">
+          <div
+            class="flex items-center justify-between p-4 border-b border-slate-100"
+          >
+            <span class="text-lg font-bold text-slate-800">Menu</span>
+            <button
+              onclick="toggleMobileMenu()"
+              class="p-2 rounded-lg hover:bg-slate-100"
+            >
+              <svg
+                class="w-6 h-6 text-slate-600"
+                fill="none"
+                stroke="currentColor"
+                viewbox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="flex-1 py-4">
+            <button
+              onclick="
+                navigateTo('home');
+                toggleMobileMenu();
+              "
+              class="w-full px-6 py-3 text-left text-slate-700 hover:bg-slate-50 font-medium"
+            >
+              Home
+            </button>
+            <button
+              onclick="
+                navigateTo('dashboard');
+                toggleMobileMenu();
+              "
+              class="w-full px-6 py-3 text-left text-slate-700 hover:bg-slate-50 font-medium"
+            >
+              Dashboard
+            </button>
+            <button
+              onclick="
+                navigateTo('pricing');
+                toggleMobileMenu();
+              "
+              class="w-full px-6 py-3 text-left text-slate-700 hover:bg-slate-50 font-medium"
+            >
+              Pricing
+            </button>
+            <button
+              onclick="
+                navigateTo('history');
+                toggleMobileMenu();
+              "
+              class="w-full px-6 py-3 text-left text-slate-700 hover:bg-slate-50 font-medium"
+            >
+              History
+            </button>
+          </div>
+          <div class="p-4 border-t border-slate-100 space-y-3">
+            <button
+              onclick="
+                showLoginModal();
+                toggleMobileMenu();
+              "
+              class="w-full py-3 text-slate-700 font-medium border border-slate-200 rounded-xl hover:bg-slate-50"
+            >
+              Sign In
+            </button>
+            <button
+              onclick="
+                showSignupModal();
+                toggleMobileMenu();
+              "
+              class="w-full py-3 text-white font-semibold btn-primary rounded-xl"
+            >
+              Get Started
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- Mobile Menu Overlay -->
+      <div
+        id="mobile-overlay"
+        class="hidden fixed inset-0 bg-black/50 z-40 lg:hidden"
+        onclick="toggleMobileMenu()"
+      ></div>
+      <!-- Main Content Area -->
+      <main id="main-content">
+        <!-- HOME PAGE -->
+        <section id="page-home" class="page-section">
+          <!-- Hero Section -->
+          <div class="relative min-h-screen gradient-mesh overflow-hidden">
+            <!-- Decorative Elements -->
+            <div
+              class="absolute top-20 left-10 w-72 h-72 bg-indigo-400/20 rounded-full blur-3xl animate-float"
+            ></div>
+            <div
+              class="absolute bottom-20 right-10 w-96 h-96 bg-purple-400/20 rounded-full blur-3xl animate-float-delayed"
+            ></div>
+            <div
+              class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 lg:pt-40 pb-20"
+            >
+              <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+                <!-- Hero Content -->
+                <div class="text-center lg:text-left">
+                  <div
+                    class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-100 rounded-full text-indigo-700 text-sm font-medium mb-6"
+                  >
+                    <span
+                      class="w-2 h-2 bg-indigo-500 rounded-full animate-pulse"
+                    ></span>
+                    AI-Powered Content Intelligence
+                  </div>
+                  <h1
+                    id="hero-title"
+                    class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-tight mb-6"
+                  >
+                    Transform Content Into
+                    <span
+                      class="bg-gradient-to-r from-indigo-600 via-purple-600 to-cyan-500 bg-clip-text text-transparent animate-gradient"
+                      >Intelligence</span
+                    >
+                  </h1>
+                  <p
+                    id="hero-subtitle"
+                    class="text-lg sm:text-xl text-slate-600 mb-8 max-w-xl mx-auto lg:mx-0"
+                  >
+                    Summarize articles, analyze SEO performance, and optimize
+                    your content strategy with our advanced AI tools. Get
+                    actionable insights in seconds.
+                  </p>
+                  <div
+                    class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
+                  >
+                    <button
+                      id="primary-cta"
+                      onclick="navigateTo('dashboard')"
+                      class="btn-primary px-8 py-4 text-white font-semibold rounded-2xl text-lg shadow-xl flex items-center justify-center gap-2"
+                    >
+                      Start Free Analysis
+                      <svg
+                        class="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewbox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M13 7l5 5m0 0l-5 5m5-5H6"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      onclick="navigateTo('pricing')"
+                      class="btn-secondary px-8 py-4 text-slate-700 font-semibold rounded-2xl text-lg flex items-center justify-center gap-2"
+                    >
+                      View Pricing
+                    </button>
+                  </div>
+                  <!-- Trust Indicators -->
+                  <div
+                    class="mt-12 flex flex-wrap items-center justify-center lg:justify-start gap-8"
+                  >
+                    <div class="flex items-center gap-2">
+                      <div class="flex -space-x-2">
+                        <div
+                          class="w-8 h-8 rounded-full bg-gradient-to-br from-pink-400 to-rose-500 border-2 border-white"
+                        ></div>
+                        <div
+                          class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 border-2 border-white"
+                        ></div>
+                        <div
+                          class="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 border-2 border-white"
+                        ></div>
+                        <div
+                          class="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 border-2 border-white"
+                        ></div>
+                      </div>
+                      <span class="text-sm text-slate-600">10,000+ users</span>
+                    </div>
+                    <div class="flex items-center gap-1">
+                      <svg
+                        class="w-5 h-5 text-amber-400"
+                        fill="currentColor"
+                        viewbox="0 0 20 20"
+                      >
+                        <path
+                          d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                        /></svg
+                      ><span class="text-sm text-slate-600">4.9/5 rating</span>
+                    </div>
+                  </div>
+                </div>
+                <!-- Hero Visual -->
+                <div class="relative">
+                  <div class="glass-card rounded-3xl p-6 shadow-2xl">
+                    <!-- Mini Dashboard Preview -->
+                    <div class="flex items-center gap-2 mb-4">
+                      <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                      <div class="w-3 h-3 rounded-full bg-amber-400"></div>
+                      <div class="w-3 h-3 rounded-full bg-emerald-400"></div>
+                      <span class="ml-2 text-xs text-slate-400 font-mono"
+                        >contentcraft.app/dashboard</span
+                      >
+                    </div>
+                    <div class="space-y-4">
+                      <!-- Sample Analysis Card -->
+                      <div
+                        class="bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl p-4"
+                      >
+                        <div class="flex items-center justify-between mb-3">
+                          <span class="text-sm font-semibold text-slate-700"
+                            >SEO Score</span
+                          >
+                          <span
+                            class="px-2 py-1 bg-emerald-100 text-emerald-700 text-xs font-semibold rounded-full"
+                            >Excellent</span
+                          >
+                        </div>
+                        <div class="flex items-center gap-4">
+                          <div class="relative w-20 h-20">
+                            <svg class="w-20 h-20 transform -rotate-90">
+                              <circle
+                                cx="40"
+                                cy="40"
+                                r="36"
+                                fill="none"
+                                stroke="#e2e8f0"
+                                stroke-width="8"
+                              />
+                              <circle
+                                cx="40"
+                                cy="40"
+                                r="36"
+                                fill="none"
+                                stroke="url(#gradient)"
+                                stroke-width="8"
+                                stroke-dasharray="226"
+                                stroke-dashoffset="23"
+                                stroke-linecap="round"
+                              />
+                              <defs>
+                                <lineargradient
+                                  id="gradient"
+                                  x1="0%"
+                                  y1="0%"
+                                  x2="100%"
+                                  y2="0%"
+                                >
+                                  <stop offset="0%" stop-color="#6366f1" />
+                                  <stop offset="100%" stop-color="#8b5cf6" />
+                                </lineargradient>
+                              </defs>
+                            </svg>
+                            <div
+                              class="absolute inset-0 flex items-center justify-center"
+                            >
+                              <span class="text-xl font-bold text-slate-800"
+                                >92</span
+                              >
+                            </div>
+                          </div>
+                          <div class="flex-1 space-y-2">
+                            <div
+                              class="flex items-center justify-between text-xs"
+                            >
+                              <span class="text-slate-500">Keywords</span>
+                              <span class="font-semibold text-emerald-600"
+                                >✓ Optimized</span
+                              >
+                            </div>
+                            <div
+                              class="flex items-center justify-between text-xs"
+                            >
+                              <span class="text-slate-500">Readability</span>
+                              <span class="font-semibold text-emerald-600"
+                                >✓ Excellent</span
+                              >
+                            </div>
+                            <div
+                              class="flex items-center justify-between text-xs"
+                            >
+                              <span class="text-slate-500">Meta Tags</span>
+                              <span class="font-semibold text-amber-600"
+                                >⚠ Review</span
+                              >
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Sample Summary Preview -->
+                      <div
+                        class="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-4"
+                      >
+                        <div class="flex items-center gap-2 mb-2">
+                          <svg
+                            class="w-4 h-4 text-indigo-600"
+                            fill="none"
+                            stroke="currentColor"
+                            viewbox="0 0 24 24"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                            /></svg
+                          ><span class="text-sm font-semibold text-slate-700"
+                            >AI Summary</span
+                          >
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                          This article discusses the latest trends in content
+                          marketing, highlighting the importance of AI-powered
+                          tools for...
+                        </p>
+                        <div
+                          class="flex items-center gap-4 mt-3 text-xs text-slate-500"
+                        >
+                          <span>📝 850 words → 120 words</span>
+                          <span>⏱️ 2 min read</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Floating Elements -->
+                  <div
+                    class="absolute -top-4 -right-4 bg-white rounded-2xl p-3 shadow-lg animate-float"
+                  >
+                    <div class="flex items-center gap-2">
+                      <div
+                        class="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center"
+                      >
+                        <svg
+                          class="w-4 h-4 text-emerald-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewbox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      </div>
+                      <span class="text-sm font-semibold text-slate-700"
+                        >Analysis Complete</span
+                      >
+                    </div>
+                  </div>
+                  <div
+                    class="absolute -bottom-4 -left-4 bg-white rounded-2xl p-3 shadow-lg animate-float-delayed"
+                  >
+                    <div class="flex items-center gap-2">
+                      <div
+                        class="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center"
+                      >
+                        <svg
+                          class="w-4 h-4 text-indigo-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewbox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M13 10V3L4 14h7v7l9-11h-7z"
+                          />
+                        </svg>
+                      </div>
+                      <span class="text-sm font-semibold text-slate-700"
+                        >AI Processing</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Features Section -->
+          <div class="py-20 lg:py-32 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div class="text-center mb-16">
+                <span
+                  class="text-indigo-600 font-semibold text-sm uppercase tracking-wider"
+                  >Features</span
+                >
+                <h2
+                  class="text-3xl lg:text-4xl font-bold text-slate-900 mt-3 mb-4"
+                >
+                  Everything You Need for Content Success
+                </h2>
+                <p class="text-lg text-slate-600 max-w-2xl mx-auto">
+                  Powerful AI tools designed to help content creators,
+                  marketers, and SEO professionals work smarter.
+                </p>
+              </div>
+              <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="feature-glow glass-card rounded-2xl p-6 hover-lift">
+                  <div
+                    class="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mb-4 shadow-lg shadow-indigo-500/30"
+                  >
+                    <svg
+                      class="w-6 h-6 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewbox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                      />
+                    </svg>
+                  </div>
+                  <h3 class="text-xl font-bold text-slate-900 mb-2">
+                    Smart Summarization
+                  </h3>
+                  <p class="text-slate-600">
+                    Extract key insights from any content. Our AI condenses
+                    articles, papers, and documents while preserving essential
+                    information.
+                  </p>
+                </div>
+                <!-- Feature 2 -->
+                <div class="feature-glow glass-card rounded-2xl p-6 hover-lift">
+                  <div
+                    class="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center mb-4 shadow-lg shadow-cyan-500/30"
+                  >
+                    <svg
+                      class="w-6 h-6 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewbox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                      />
+                    </svg>
+                  </div>
+                  <h3 class="text-xl font-bold text-slate-900 mb-2">
+                    SEO Analysis
+                  </h3>
+                  <p class="text-slate-600">
+                    Comprehensive SEO scoring with actionable recommendations.
+                    Optimize keywords, meta tags, readability, and more.
+                  </p>
+                </div>
+                <!-- Feature 3 -->
+                <div class="feature-glow glass-card rounded-2xl p-6 hover-lift">
+                  <div
+                    class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center mb-4 shadow-lg shadow-emerald-500/30"
+                  >
+                    <svg
+                      class="w-6 h-6 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewbox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                      />
+                    </svg>
+                  </div>
+                  <h3 class="text-xl font-bold text-slate-900 mb-2">
+                    Export Reports
+                  </h3>
+                  <p class="text-slate-600">
+                    Download professional PDF reports with detailed analysis.
+                    Share insights with your team or clients easily.
+                  </p>
+                </div>
+                <!-- Feature 4 -->
+                <div class="feature-glow glass-card rounded-2xl p-6 hover-lift">
+                  <div
+                    class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center mb-4 shadow-lg shadow-amber-500/30"
+                  >
+                    <svg
+                      class="w-6 h-6 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewbox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                  </div>
+                  <h3 class="text-xl font-bold text-slate-900 mb-2">
+                    History &amp; Tracking
+                  </h3>
+                  <p class="text-slate-600">
+                    Access your complete analysis history. Track content
+                    performance over time and monitor improvements.
+                  </p>
+                </div>
+                <!-- Feature 5 -->
+                <div class="feature-glow glass-card rounded-2xl p-6 hover-lift">
+                  <div
+                    class="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center mb-4 shadow-lg shadow-pink-500/30"
+                  >
+                    <svg
+                      class="w-6 h-6 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewbox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M13 10V3L4 14h7v7l9-11h-7z"
+                      />
+                    </svg>
+                  </div>
+                  <h3 class="text-xl font-bold text-slate-900 mb-2">
+                    Real-time Processing
+                  </h3>
+                  <p class="text-slate-600">
+                    Get instant results with our high-speed AI engine. No
+                    waiting – analyze content in seconds.
+                  </p>
+                </div>
+                <!-- Feature 6 -->
+                <div class="feature-glow glass-card rounded-2xl p-6 hover-lift">
+                  <div
+                    class="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center mb-4 shadow-lg shadow-violet-500/30"
+                  >
+                    <svg
+                      class="w-6 h-6 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewbox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                      />
+                    </svg>
+                  </div>
+                  <h3 class="text-xl font-bold text-slate-900 mb-2">
+                    Privacy First
+                  </h3>
+                  <p class="text-slate-600">
+                    Your content is never stored or used for training.
+                    Enterprise-grade security with full GDPR compliance.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- CTA Section -->
+          <div
+            class="py-20 bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-700 relative overflow-hidden"
+          >
+            <div class="absolute inset-0 opacity-30">
+              <div
+                class="absolute top-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"
+              ></div>
+              <div
+                class="absolute bottom-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"
+              ></div>
+            </div>
+            <div
+              class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center"
+            >
+              <h2 class="text-3xl lg:text-4xl font-bold text-white mb-6">
+                Ready to Transform Your Content?
+              </h2>
+              <p class="text-lg text-indigo-100 mb-8 max-w-2xl mx-auto">
+                Join thousands of content creators and marketers who use
+                ContentCraft to optimize their content strategy.
+              </p>
+              <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button
+                  onclick="navigateTo('dashboard')"
+                  class="px-8 py-4 bg-white text-indigo-600 font-semibold rounded-2xl text-lg hover:bg-indigo-50 transition-colors shadow-xl"
+                >
+                  Start Free Analysis
+                </button>
+                <button
+                  onclick="navigateTo('pricing')"
+                  class="px-8 py-4 bg-transparent border-2 border-white/50 text-white font-semibold rounded-2xl text-lg hover:bg-white/10 transition-colors"
+                >
+                  View Pricing
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- DASHBOARD PAGE -->
+        <section id="page-dashboard" class="page-section hidden">
+          <div class="min-h-screen bg-slate-50 pt-20 lg:pt-24 pb-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <!-- Dashboard Header -->
+              <div class="mb-8">
+                <h1 class="text-2xl lg:text-3xl font-bold text-slate-900">
+                  Content Analysis Dashboard
+                </h1>
+                <p class="text-slate-600 mt-1">
+                  Summarize and analyze your content with AI
+                </p>
+              </div>
+              <!-- Analysis Tabs -->
+              <div class="glass-card rounded-2xl p-2 mb-8 inline-flex">
+                <button
+                  onclick="switchAnalysisTab('summarize')"
+                  id="tab-summarize"
+                  class="px-6 py-3 rounded-xl font-semibold text-sm transition-all bg-gradient-to-r from-indigo-500 to-purple-600 text-white"
+                >
+                  📝 Summarize
+                </button>
+                <button
+                  onclick="switchAnalysisTab('seo')"
+                  id="tab-seo"
+                  class="px-6 py-3 rounded-xl font-semibold text-sm transition-all text-slate-600 hover:text-slate-900"
+                >
+                  📊 SEO Analysis
+                </button>
+              </div>
+              <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Input Panel -->
+                <div class="lg:col-span-2">
+                  <div class="glass-card rounded-2xl p-6 shadow-xl">
+                    <div class="flex items-center justify-between mb-4">
+                      <h2 class="text-lg font-bold text-slate-800">
+                        Input Content
+                      </h2>
+                      <div class="flex items-center gap-2">
+                        <button
+                          onclick="clearInput()"
+                          class="text-sm text-slate-500 hover:text-slate-700 transition-colors"
+                        >
+                          Clear
+                        </button>
+                        <button
+                          onclick="loadSampleContent()"
+                          class="text-sm text-indigo-600 hover:text-indigo-700 font-medium transition-colors"
+                        >
+                          Load Sample
+                        </button>
+                      </div>
+                    </div>
+                    <label for="content-input" class="sr-only"
+                      >Enter your content to analyze</label
+                    >
+                    <textarea
+                      id="content-input"
+                      class="w-full h-64 p-4 bg-slate-50 border border-slate-200 rounded-xl resize-none focus:outline-none input-focus text-slate-700 placeholder-slate-400"
+                      placeholder="Paste your article, blog post, or any content here to analyze...
+
+You can also enter a URL to fetch and analyze content from the web."
+                    ></textarea>
+                    <div
+                      class="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-4 gap-4"
+                    >
+                      <div
+                        class="flex items-center gap-4 text-sm text-slate-500"
+                      >
+                        <span id="char-count">0 characters</span>
+                        <span id="word-count">0 words</span>
+                      </div>
+                      <button
+                        onclick="analyzeContent()"
+                        id="analyze-btn"
+                        class="btn-primary px-6 py-3 text-white font-semibold rounded-xl flex items-center gap-2"
+                      >
+                        <svg
+                          class="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewbox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M13 10V3L4 14h7v7l9-11h-7z"
+                          /></svg
+                        ><span id="analyze-btn-text">Analyze Content</span>
+                      </button>
+                    </div>
+                  </div>
+                  <!-- Results Panel -->
+                  <div id="results-panel" class="hidden mt-8 animate-fade-up">
+                    <!-- Summarize Results -->
+                    <div
+                      id="summarize-results"
+                      class="glass-card rounded-2xl p-6 shadow-xl"
+                    >
+                      <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-lg font-bold text-slate-800">
+                          AI Summary
+                        </h2>
+                        <div class="flex items-center gap-2">
+                          <button
+                            onclick="copySummary()"
+                            class="p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-all tooltip"
+                            data-tooltip="Copy"
+                          >
+                            <svg
+                              class="w-5 h-5"
+                              fill="none"
+                              stroke="currentColor"
+                              viewbox="0 0 24 24"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                              />
+                            </svg>
+                          </button>
+                          <button
+                            onclick="exportReport('summary')"
+                            class="p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-all tooltip"
+                            data-tooltip="Export"
+                          >
+                            <svg
+                              class="w-5 h-5"
+                              fill="none"
+                              stroke="currentColor"
+                              viewbox="0 0 24 24"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                              />
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+                        <div class="bg-indigo-50 rounded-xl p-3 text-center">
+                          <p
+                            class="text-2xl font-bold text-indigo-600"
+                            id="original-words"
+                          >
+                            850
+                          </p>
+                          <p class="text-xs text-slate-500">Original Words</p>
+                        </div>
+                        <div class="bg-purple-50 rounded-xl p-3 text-center">
+                          <p
+                            class="text-2xl font-bold text-purple-600"
+                            id="summary-words"
+                          >
+                            120
+                          </p>
+                          <p class="text-xs text-slate-500">Summary Words</p>
+                        </div>
+                        <div class="bg-emerald-50 rounded-xl p-3 text-center">
+                          <p
+                            class="text-2xl font-bold text-emerald-600"
+                            id="reduction-percent"
+                          >
+                            86%
+                          </p>
+                          <p class="text-xs text-slate-500">Reduction</p>
+                        </div>
+                        <div class="bg-cyan-50 rounded-xl p-3 text-center">
+                          <p
+                            class="text-2xl font-bold text-cyan-600"
+                            id="read-time"
+                          >
+                            ~2 min
+                          </p>
+                          <p class="text-xs text-slate-500">Read Time</p>
+                        </div>
+                      </div>
+                      <div
+                        class="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl p-5"
+                      >
+                        <h3 class="font-semibold text-slate-800 mb-3">
+                          Key Points
+                        </h3>
+                        <ul id="key-points" class="space-y-2">
+                          <li class="flex items-start gap-2 text-slate-600">
+                            <span class="text-indigo-500 mt-1">•</span>
+                            <span
+                              >AI-powered content analysis helps marketers
+                              understand their audience better and create more
+                              engaging content.</span
+                            >
+                          </li>
+                          <li class="flex items-start gap-2 text-slate-600">
+                            <span class="text-indigo-500 mt-1">•</span>
+                            <span
+                              >SEO optimization remains crucial for online
+                              visibility, with keyword research being the
+                              foundation.</span
+                            >
+                          </li>
+                          <li class="flex items-start gap-2 text-slate-600">
+                            <span class="text-indigo-500 mt-1">•</span>
+                            <span
+                              >Regular content audits and performance tracking
+                              lead to improved engagement metrics.</span
+                            >
+                          </li>
+                        </ul>
+                      </div>
+                      <div
+                        class="mt-4 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl p-5"
+                      >
+                        <h3 class="font-semibold text-slate-800 mb-3">
+                          Full Summary
+                        </h3>
+                        <p
+                          id="full-summary"
+                          class="text-slate-600 leading-relaxed"
+                        >
+                          This comprehensive article explores the intersection
+                          of AI technology and content marketing. The author
+                          emphasizes how modern AI tools can significantly
+                          enhance content creation workflows, from initial
+                          research to final optimization. Key strategies include
+                          leveraging machine learning for audience analysis,
+                          implementing automated SEO recommendations, and using
+                          natural language processing for readability
+                          improvements. The piece concludes with actionable
+                          steps for marketers looking to integrate AI into their
+                          existing processes.
+                        </p>
+                      </div>
+                    </div>
+                    <!-- SEO Results -->
+                    <div
+                      id="seo-results"
+                      class="hidden glass-card rounded-2xl p-6 shadow-xl"
+                    >
+                      <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-lg font-bold text-slate-800">
+                          SEO Analysis Report
+                        </h2>
+                        <div class="flex items-center gap-2">
+                          <button
+                            onclick="exportReport('seo')"
+                            class="px-4 py-2 bg-indigo-100 text-indigo-700 font-semibold rounded-lg text-sm hover:bg-indigo-200 transition-colors flex items-center gap-2"
+                          >
+                            <svg
+                              class="w-4 h-4"
+                              fill="none"
+                              stroke="currentColor"
+                              viewbox="0 0 24 24"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                              />
+                            </svg>
+                            Export Report
+                          </button>
+                        </div>
+                      </div>
+                      <!-- Score Overview -->
+                      <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div
+                          class="bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl p-6"
+                        >
+                          <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-semibold text-slate-700">
+                              Overall SEO Score
+                            </h3>
+                            <span
+                              id="seo-badge"
+                              class="px-3 py-1 bg-emerald-100 text-emerald-700 text-sm font-semibold rounded-full"
+                              >Excellent</span
+                            >
+                          </div>
+                          <div class="flex items-center gap-6">
+                            <div class="relative w-28 h-28">
+                              <svg class="w-28 h-28">
+                                <circle
+                                  cx="56"
+                                  cy="56"
+                                  r="48"
+                                  fill="none"
+                                  stroke="#e2e8f0"
+                                  stroke-width="10"
+                                />
+                                <circle
+                                  id="seo-score-ring"
+                                  class="score-ring"
+                                  cx="56"
+                                  cy="56"
+                                  r="48"
+                                  fill="none"
+                                  stroke="url(#seo-gradient)"
+                                  stroke-width="10"
+                                  stroke-linecap="round"
+                                  style="stroke-dashoffset: 50"
+                                />
+                                <defs>
+                                  <lineargradient
+                                    id="seo-gradient"
+                                    x1="0%"
+                                    y1="0%"
+                                    x2="100%"
+                                    y2="0%"
+                                  >
+                                    <stop offset="0%" stop-color="#6366f1" />
+                                    <stop offset="100%" stop-color="#10b981" />
+                                  </lineargradient>
+                                </defs>
+                              </svg>
+                              <div
+                                class="absolute inset-0 flex items-center justify-center"
+                              >
+                                <span
+                                  id="seo-score"
+                                  class="text-3xl font-bold text-slate-800"
+                                  >87</span
+                                >
+                              </div>
+                            </div>
+                            <div class="flex-1 space-y-3">
+                              <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                  <span class="text-slate-500">Keywords</span>
+                                  <span class="font-semibold text-slate-700"
+                                    >92/100</span
+                                  >
+                                </div>
+                                <div
+                                  class="h-2 bg-slate-200 rounded-full overflow-hidden"
+                                >
+                                  <div
+                                    class="h-full bg-emerald-500 rounded-full"
+                                    style="width: 92%"
+                                  ></div>
+                                </div>
+                              </div>
+                              <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                  <span class="text-slate-500"
+                                    >Readability</span
+                                  >
+                                  <span class="font-semibold text-slate-700"
+                                    >85/100</span
+                                  >
+                                </div>
+                                <div
+                                  class="h-2 bg-slate-200 rounded-full overflow-hidden"
+                                >
+                                  <div
+                                    class="h-full bg-indigo-500 rounded-full"
+                                    style="width: 85%"
+                                  ></div>
+                                </div>
+                              </div>
+                              <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                  <span class="text-slate-500">Structure</span>
+                                  <span class="font-semibold text-slate-700"
+                                    >78/100</span
+                                  >
+                                </div>
+                                <div
+                                  class="h-2 bg-slate-200 rounded-full overflow-hidden"
+                                >
+                                  <div
+                                    class="h-full bg-amber-500 rounded-full"
+                                    style="width: 78%"
+                                  ></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-6"
+                        >
+                          <h3 class="font-semibold text-slate-700 mb-4">
+                            Quick Stats
+                          </h3>
+                          <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-white/70 rounded-xl p-3">
+                              <p
+                                class="text-2xl font-bold text-indigo-600"
+                                id="stat-words"
+                              >
+                                1,247
+                              </p>
+                              <p class="text-xs text-slate-500">Total Words</p>
+                            </div>
+                            <div class="bg-white/70 rounded-xl p-3">
+                              <p
+                                class="text-2xl font-bold text-purple-600"
+                                id="stat-sentences"
+                              >
+                                52
+                              </p>
+                              <p class="text-xs text-slate-500">Sentences</p>
+                            </div>
+                            <div class="bg-white/70 rounded-xl p-3">
+                              <p
+                                class="text-2xl font-bold text-emerald-600"
+                                id="stat-paragraphs"
+                              >
+                                8
+                              </p>
+                              <p class="text-xs text-slate-500">Paragraphs</p>
+                            </div>
+                            <div class="bg-white/70 rounded-xl p-3">
+                              <p
+                                class="text-2xl font-bold text-cyan-600"
+                                id="stat-reading"
+                              >
+                                ~5 min
+                              </p>
+                              <p class="text-xs text-slate-500">Read Time</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Detailed Analysis -->
+                      <div class="space-y-4">
+                        <h3 class="font-semibold text-slate-800">
+                          Detailed Analysis
+                        </h3>
+                        <!-- Keyword Analysis -->
+                        <div
+                          class="bg-white rounded-xl p-4 border border-slate-200"
+                        >
+                          <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center gap-2">
+                              <div
+                                class="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center"
+                              >
+                                <svg
+                                  class="w-4 h-4 text-emerald-600"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewbox="0 0 24 24"
+                                >
+                                  <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+                                  />
+                                </svg>
+                              </div>
+                              <span class="font-semibold text-slate-700"
+                                >Keyword Optimization</span
+                              >
+                            </div>
+                            <span
+                              class="px-2 py-1 bg-emerald-100 text-emerald-700 text-xs font-semibold rounded-full"
+                              >✓ Good</span
+                            >
+                          </div>
+                          <div class="flex flex-wrap gap-2 mb-3">
+                            <span
+                              class="px-3 py-1 bg-indigo-100 text-indigo-700 text-sm rounded-full"
+                              >content marketing (8)</span
+                            >
+                            <span
+                              class="px-3 py-1 bg-purple-100 text-purple-700 text-sm rounded-full"
+                              >AI tools (6)</span
+                            >
+                            <span
+                              class="px-3 py-1 bg-cyan-100 text-cyan-700 text-sm rounded-full"
+                              >SEO (5)</span
+                            >
+                            <span
+                              class="px-3 py-1 bg-emerald-100 text-emerald-700 text-sm rounded-full"
+                              >optimization (4)</span
+                            >
+                          </div>
+                          <p class="text-sm text-slate-500">
+                            Keywords are well-distributed throughout the content
+                            with appropriate density.
+                          </p>
+                        </div>
+                        <!-- Readability -->
+                        <div
+                          class="bg-white rounded-xl p-4 border border-slate-200"
+                        >
+                          <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center gap-2">
+                              <div
+                                class="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center"
+                              >
+                                <svg
+                                  class="w-4 h-4 text-indigo-600"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewbox="0 0 24 24"
+                                >
+                                  <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                  />
+                                </svg>
+                              </div>
+                              <span class="font-semibold text-slate-700"
+                                >Readability Score</span
+                              >
+                            </div>
+                            <span
+                              class="px-2 py-1 bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-full"
+                              >Grade 8-9</span
+                            >
+                          </div>
+                          <p class="text-sm text-slate-500">
+                            Content is readable for most audiences. Consider
+                            simplifying some complex sentences for broader
+                            accessibility.
+                          </p>
+                        </div>
+                        <!-- Recommendations -->
+                        <div
+                          class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-4 border border-amber-200"
+                        >
+                          <div class="flex items-center gap-2 mb-3">
+                            <div
+                              class="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center"
+                            >
+                              <svg
+                                class="w-4 h-4 text-amber-600"
+                                fill="none"
+                                stroke="currentColor"
+                                viewbox="0 0 24 24"
+                              >
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  stroke-width="2"
+                                  d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                                />
+                              </svg>
+                            </div>
+                            <span class="font-semibold text-slate-700"
+                              >Recommendations</span
+                            >
+                          </div>
+                          <ul class="space-y-2">
+                            <li
+                              class="flex items-start gap-2 text-sm text-slate-600"
+                            >
+                              <span class="text-amber-500">⚡</span>
+                              <span
+                                >Add a meta description (currently
+                                missing)</span
+                              >
+                            </li>
+                            <li
+                              class="flex items-start gap-2 text-sm text-slate-600"
+                            >
+                              <span class="text-amber-500">⚡</span>
+                              <span
+                                >Include more internal links to related
+                                content</span
+                              >
+                            </li>
+                            <li
+                              class="flex items-start gap-2 text-sm text-slate-600"
+                            >
+                              <span class="text-amber-500">⚡</span>
+                              <span>Consider adding alt text to images</span>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Sidebar -->
+                <div class="space-y-6">
+                  <!-- Quick Actions -->
+                  <div class="glass-card rounded-2xl p-5 shadow-xl">
+                    <h3 class="font-bold text-slate-800 mb-4">Quick Actions</h3>
+                    <div class="space-y-3">
+                      <button
+                        onclick="loadSampleContent()"
+                        class="w-full px-4 py-3 bg-slate-100 hover:bg-slate-200 rounded-xl text-left text-sm font-medium text-slate-700 transition-colors flex items-center gap-3"
+                      >
+                        <span class="text-lg">📄</span> Load Sample Content
+                      </button>
+                      <button
+                        onclick="navigateTo('history')"
+                        class="w-full px-4 py-3 bg-slate-100 hover:bg-slate-200 rounded-xl text-left text-sm font-medium text-slate-700 transition-colors flex items-center gap-3"
+                      >
+                        <span class="text-lg">📊</span> View Analysis History
+                      </button>
+                    </div>
+                  </div>
+                  <!-- Usage Stats -->
+                  <div class="glass-card rounded-2xl p-5 shadow-xl">
+                    <h3 class="font-bold text-slate-800 mb-4">This Month</h3>
+                    <div class="space-y-4">
+                      <div>
+                        <div class="flex justify-between text-sm mb-2">
+                          <span class="text-slate-500">Analyses Used</span>
+                          <span class="font-semibold text-slate-700"
+                            >24 / 50</span
+                          >
+                        </div>
+                        <div
+                          class="h-2 bg-slate-200 rounded-full overflow-hidden"
+                        >
+                          <div
+                            class="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full"
+                            style="width: 48%"
+                          ></div>
+                        </div>
+                      </div>
+                      <div class="pt-3 border-t border-slate-100">
+                        <div class="flex items-center justify-between text-sm">
+                          <span class="text-slate-500">Current Plan</span>
+                          <span
+                            class="px-2 py-1 bg-indigo-100 text-indigo-700 font-semibold rounded-full text-xs"
+                            >PRO</span
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Tips -->
+                  <div
+                    class="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl p-5 text-white"
+                  >
+                    <div class="flex items-center gap-2 mb-3">
+                      <svg
+                        class="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewbox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                        /></svg
+                      ><span class="font-semibold">Pro Tip</span>
+                    </div>
+                    <p class="text-sm text-indigo-100">
+                      For best SEO results, aim for content between 1,000-2,500
+                      words with a keyword density of 1-2%.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- PRICING PAGE -->
+        <section id="page-pricing" class="page-section hidden">
+          <div class="min-h-screen bg-slate-50 pt-24 lg:pt-32 pb-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div class="text-center mb-12 lg:mb-16">
+                <span
+                  class="text-indigo-600 font-semibold text-sm uppercase tracking-wider"
+                  >Pricing</span
+                >
+                <h1
+                  class="text-3xl lg:text-4xl font-bold text-slate-900 mt-3 mb-4"
+                >
+                  Simple, Transparent Pricing
+                </h1>
+                <p class="text-lg text-slate-600 max-w-2xl mx-auto">
+                  Choose the plan that fits your needs. All plans include our
+                  core AI features.
+                </p>
+              </div>
+              <!-- Pricing Toggle -->
+              <div class="flex items-center justify-center gap-4 mb-12">
+                <span id="monthly-label" class="text-slate-900 font-medium"
+                  >Monthly</span
+                >
+                <button
+                  onclick="toggleBilling()"
+                  id="billing-toggle"
+                  class="relative w-14 h-7 bg-slate-200 rounded-full transition-colors"
+                >
+                  <div
+                    id="billing-indicator"
+                    class="absolute left-1 top-1 w-5 h-5 bg-white rounded-full shadow transition-transform"
+                  ></div>
+                </button>
+                <span id="yearly-label" class="text-slate-500 font-medium"
+                  >Yearly
+                  <span class="text-emerald-600 text-sm">(Save 20%)</span></span
+                >
+              </div>
+              <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <!-- Free Plan -->
+                <div class="glass-card rounded-2xl p-6 lg:p-8 hover-lift">
+                  <div class="text-center mb-6">
+                    <h3 class="text-xl font-bold text-slate-900 mb-2">Free</h3>
+                    <p class="text-slate-500 text-sm">Perfect for trying out</p>
+                  </div>
+                  <div class="text-center mb-6">
+                    <span class="text-4xl font-bold text-slate-900">$0</span>
+                    <span class="text-slate-500">/month</span>
+                  </div>
+                  <ul class="space-y-3 mb-8">
+                    <li class="flex items-center gap-3 text-slate-600">
+                      <svg
+                        class="w-5 h-5 text-emerald-500 flex-shrink-0"
+                        fill="none"
+                        stroke="currentColor"
+                        viewbox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M5 13l4 4L19 7"
+                        /></svg
+                      ><span>5 analyses per month</span>
+                    </li>
+                    <li class="flex items-center gap-3 text-slate-600">
+                      <svg
+                        class="w-5 h-5 text-emerald-500 flex-shrink-0"
+                        fill="none"
+                        stroke="currentColor"
+                        viewbox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M5 13l4 4L19 7"
+                        /></svg
+                      ><span>Basic summarization</span>
+                    </li>
+                    <li class="flex items-center gap-3 text-slate-600">
+                      <svg
+                        class="w-5 h-5 text-emerald-500 flex-shrink-0"
+                        fill="none"
+                        stroke="currentColor"
+                        viewbox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M5 13l4 4L19 7"
+                        /></svg
+                      ><span>Basic SEO score</span>
+                    </li>
+                    <li class="flex items-center gap-3 text-slate-400">
+                      <svg
+                        class="w-5 h-5 flex-shrink-0"
+                        fill="none"
+                        stroke="currentColor"
+                        viewbox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M6 18L18 6M6 6l12 12"
+                        /></svg
+                      ><span>No export reports</span>
+                    </li>
+                    <li class="flex items-center gap-3 text-slate-400">
+                      <svg
+                        class="w-5 h-5 flex-shrink-0"
+                        fill="none"
+                        stroke="currentColor"
+                        viewbox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M6 18L18 6M6 6l12 12"
+                        /></svg
+                      ><span>No history</span>
+                    </li>
+                  </ul>
+                  <button
+                    onclick="showSignupModal()"
+                    class="w-full py-3 border-2 border-slate-200 text-slate-700 font-semibold rounded-xl hover:bg-slate-50 transition-colors"
+                  >
+                    Get Started Free
+                  </button>
+                </div>
+                <!-- Pro Plan -->
+                <div
+                  class="pricing-popular rounded-2xl p-6 lg:p-8 hover-lift relative"
+                >
+                  <div
+                    class="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-sm font-semibold rounded-full"
+                  >
+                    Most Popular
+                  </div>
+                  <div class="text-center mb-6">
+                    <h3 class="text-xl font-bold text-slate-900 mb-2">Pro</h3>
+                    <p class="text-slate-500 text-sm">For content creators</p>
+                  </div>
+                  <div class="text-center mb-6">
+                    <span
+                      class="text-4xl font-bold text-slate-900 price-monthly"
+                      >$19</span
+                    >
+                    <span
+                      class="text-4xl font-bold text-slate-900 price-yearly hidden"
+                      >$15</span
+                    >
+                    <span class="text-slate-500">/month</span>
+                  </div>
+                  <ul class="space-y-3 mb-8">
+                    <li class="flex items-center gap-3 text-slate-600">
+                      <svg
+                        class="w-5 h-5 text-emerald-500 flex-shrink-0"
+                        fill="none"
+                        stroke="currentColor"
+                        viewbox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M5 13l4 4L19 7"
+                        /></svg
+                      ><span>50 analyses per month</span>
+                    </li>
+                    <li class="flex items-center gap-3 text-slate-600">
+                      <svg
+                        class="w-5 h-5 text-emerald-500 flex-shrink-0"
+                        fill="none"
+                        stroke="currentColor"
+                        viewbox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M5 13l4 4L19 7"
+                        /></svg
+                      ><span>Advanced AI summarization</span>
+                    </li>
+                    <li class="flex items-center gap-3 text-slate-600">
+                      <svg
+                        class="w-5 h-5 text-emerald-500 flex-shrink-0"
+                        fill="none"
+                        stroke="currentColor"
+                        viewbox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M5 13l4 4L19 7"
+                        /></svg
+                      ><span>Full SEO analysis</span>
+                    </li>
+                    <li class="flex items-center gap-3 text-slate-600">
+                      <svg
+                        class="w-5 h-5 text-emerald-500 flex-shrink-0"
+                        fill="none"
+                        stroke="currentColor"
+                        viewbox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M5 13l4 4L19 7"
+                        /></svg
+                      ><span>PDF export reports</span>
+                    </li>
+                    <li class="flex items-center gap-3 text-slate-600">
+                      <svg
+                        class="w-5 h-5 text-emerald-500 flex-shrink-0"
+                        fill="none"
+                        stroke="currentColor"
+                        viewbox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M5 13l4 4L19 7"
+                        /></svg
+                      ><span>30-day history</span>
+                    </li>
+                  </ul>
+                  <button
+                    onclick="showSignupModal()"
+                    class="w-full py-3 btn-primary text-white font-semibold rounded-xl"
+                  >
+                    Start Pro Trial
+                  </button>
+                </div>
+                <!-- Enterprise Plan -->
+                <div class="glass-card rounded-2xl p-6 lg:p-8 hover-lift">
+                  <div class="text-center mb-6">
+                    <h3 class="text-xl font-bold text-slate-900 mb-2">
+                      Enterprise
+                    </h3>
+                    <p class="text-slate-500 text-sm">
+                      For teams &amp; agencies
+                    </p>
+                  </div>
+                  <div class="text-center mb-6">
+                    <span
+                      class="text-4xl font-bold text-slate-900 price-monthly"
+                      >$79</span
+                    >
+                    <span
+                      class="text-4xl font-bold text-slate-900 price-yearly hidden"
+                      >$63</span
+                    >
+                    <span class="text-slate-500">/month</span>
+                  </div>
+                  <ul class="space-y-3 mb-8">
+                    <li class="flex items-center gap-3 text-slate-600">
+                      <svg
+                        class="w-5 h-5 text-emerald-500 flex-shrink-0"
+                        fill="none"
+                        stroke="currentColor"
+                        viewbox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M5 13l4 4L19 7"
+                        /></svg
+                      ><span>Unlimited analyses</span>
+                    </li>
+                    <li class="flex items-center gap-3 text-slate-600">
+                      <svg
+                        class="w-5 h-5 text-emerald-500 flex-shrink-0"
+                        fill="none"
+                        stroke="currentColor"
+                        viewbox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M5 13l4 4L19 7"
+                        /></svg
+                      ><span>Priority AI processing</span>
+                    </li>
+                    <li class="flex items-center gap-3 text-slate-600">
+                      <svg
+                        class="w-5 h-5 text-emerald-500 flex-shrink-0"
+                        fill="none"
+                        stroke="currentColor"
+                        viewbox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M5 13l4 4L19 7"
+                        /></svg
+                      ><span>API access</span>
+                    </li>
+                    <li class="flex items-center gap-3 text-slate-600">
+                      <svg
+                        class="w-5 h-5 text-emerald-500 flex-shrink-0"
+                        fill="none"
+                        stroke="currentColor"
+                        viewbox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M5 13l4 4L19 7"
+                        /></svg
+                      ><span>Team collaboration</span>
+                    </li>
+                    <li class="flex items-center gap-3 text-slate-600">
+                      <svg
+                        class="w-5 h-5 text-emerald-500 flex-shrink-0"
+                        fill="none"
+                        stroke="currentColor"
+                        viewbox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M5 13l4 4L19 7"
+                        /></svg
+                      ><span>Unlimited history</span>
+                    </li>
+                  </ul>
+                  <button
+                    onclick="showSignupModal()"
+                    class="w-full py-3 border-2 border-indigo-200 text-indigo-700 font-semibold rounded-xl hover:bg-indigo-50 transition-colors"
+                  >
+                    Contact Sales
+                  </button>
+                </div>
+              </div>
+              <!-- FAQ Section -->
+              <div class="mt-20 max-w-3xl mx-auto">
+                <h2 class="text-2xl font-bold text-slate-900 text-center mb-8">
+                  Frequently Asked Questions
+                </h2>
+                <div class="space-y-4">
+                  <div class="glass-card rounded-xl p-5">
+                    <button
+                      onclick="toggleFaq(this)"
+                      class="w-full flex items-center justify-between text-left"
+                    >
+                      <span class="font-semibold text-slate-800"
+                        >Can I cancel my subscription anytime?</span
+                      >
+                      <svg
+                        class="w-5 h-5 text-slate-400 transition-transform"
+                        fill="none"
+                        stroke="currentColor"
+                        viewbox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
+                    </button>
+                    <div class="hidden mt-3 text-slate-600 text-sm">
+                      Yes, you can cancel your subscription at any time. Your
+                      access will continue until the end of your billing period.
+                    </div>
+                  </div>
+                  <div class="glass-card rounded-xl p-5">
+                    <button
+                      onclick="toggleFaq(this)"
+                      class="w-full flex items-center justify-between text-left"
+                    >
+                      <span class="font-semibold text-slate-800"
+                        >Is my content secure and private?</span
+                      >
+                      <svg
+                        class="w-5 h-5 text-slate-400 transition-transform"
+                        fill="none"
+                        stroke="currentColor"
+                        viewbox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
+                    </button>
+                    <div class="hidden mt-3 text-slate-600 text-sm">
+                      Absolutely. Your content is never stored or used for AI
+                      training. We process your content in real-time and discard
+                      it immediately after analysis. We are fully GDPR
+                      compliant.
+                    </div>
+                  </div>
+                  <div class="glass-card rounded-xl p-5">
+                    <button
+                      onclick="toggleFaq(this)"
+                      class="w-full flex items-center justify-between text-left"
+                    >
+                      <span class="font-semibold text-slate-800"
+                        >What types of content can I analyze?</span
+                      >
+                      <svg
+                        class="w-5 h-5 text-slate-400 transition-transform"
+                        fill="none"
+                        stroke="currentColor"
+                        viewbox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
+                    </button>
+                    <div class="hidden mt-3 text-slate-600 text-sm">
+                      You can analyze any text-based content including articles,
+                      blog posts, web pages, documents, and more. Simply paste
+                      the text or enter a URL.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- HISTORY PAGE -->
+        <section id="page-history" class="page-section hidden">
+          <div class="min-h-screen bg-slate-50 pt-24 lg:pt-28 pb-12">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div
+                class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8"
+              >
+                <div>
+                  <h1 class="text-2xl lg:text-3xl font-bold text-slate-900">
+                    Analysis History
+                  </h1>
+                  <p class="text-slate-600 mt-1">
+                    View and manage your past analyses
+                  </p>
+                </div>
+                <div class="flex items-center gap-3">
+                  <label for="history-filter" class="sr-only"
+                    >Filter history</label
+                  >
+                  <select
+                    id="history-filter"
+                    class="px-4 py-2 bg-white border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none input-focus"
+                  >
+                    <option>All Types</option>
+                    <option>Summaries</option>
+                    <option>SEO Analysis</option>
+                  </select>
+                  <button
+                    class="p-2 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors"
+                  >
+                    <svg
+                      class="w-5 h-5 text-slate-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewbox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <!-- History List -->
+              <div class="glass-card rounded-2xl shadow-xl overflow-hidden">
+                <div class="divide-y divide-slate-100">
+                  <!-- History Item 1 -->
+                  <div
+                    class="history-item p-4 lg:p-5 cursor-pointer"
+                    onclick="viewHistoryItem(1)"
+                  >
+                    <div class="flex items-start gap-4">
+                      <div
+                        class="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center flex-shrink-0"
+                      >
+                        <svg
+                          class="w-5 h-5 text-indigo-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewbox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                          />
+                        </svg>
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <div
+                          class="flex items-center justify-between gap-2 mb-1"
+                        >
+                          <h3 class="font-semibold text-slate-800 truncate">
+                            The Future of AI in Content Marketing
+                          </h3>
+                          <span class="text-xs text-slate-400 whitespace-nowrap"
+                            >2 hours ago</span
+                          >
+                        </div>
+                        <p class="text-sm text-slate-500 line-clamp-2 mb-2">
+                          This article explores how artificial intelligence is
+                          transforming content marketing strategies...
+                        </p>
+                        <div class="flex items-center gap-4">
+                          <span
+                            class="px-2 py-1 bg-indigo-100 text-indigo-700 text-xs font-medium rounded-full"
+                            >Summary</span
+                          >
+                          <span class="text-xs text-slate-400"
+                            >850 → 120 words</span
+                          >
+                        </div>
+                      </div>
+                      <svg
+                        class="w-5 h-5 text-slate-300 flex-shrink-0"
+                        fill="none"
+                        stroke="currentColor"
+                        viewbox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                  <!-- History Item 2 -->
+                  <div
+                    class="history-item p-4 lg:p-5 cursor-pointer"
+                    onclick="viewHistoryItem(2)"
+                  >
+                    <div class="flex items-start gap-4">
+                      <div
+                        class="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center flex-shrink-0"
+                      >
+                        <svg
+                          class="w-5 h-5 text-emerald-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewbox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                          />
+                        </svg>
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <div
+                          class="flex items-center justify-between gap-2 mb-1"
+                        >
+                          <h3 class="font-semibold text-slate-800 truncate">
+                            E-commerce SEO Best Practices Guide
+                          </h3>
+                          <span class="text-xs text-slate-400 whitespace-nowrap"
+                            >Yesterday</span
+                          >
+                        </div>
+                        <p class="text-sm text-slate-500 line-clamp-2 mb-2">
+                          A comprehensive guide to optimizing your online store
+                          for search engines...
+                        </p>
+                        <div class="flex items-center gap-4">
+                          <span
+                            class="px-2 py-1 bg-emerald-100 text-emerald-700 text-xs font-medium rounded-full"
+                            >SEO Analysis</span
+                          >
+                          <span class="text-xs text-slate-400"
+                            >Score: 87/100</span
+                          >
+                        </div>
+                      </div>
+                      <svg
+                        class="w-5 h-5 text-slate-300 flex-shrink-0"
+                        fill="none"
+                        stroke="currentColor"
+                        viewbox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                  <!-- History Item 3 -->
+                  <div
+                    class="history-item p-4 lg:p-5 cursor-pointer"
+                    onclick="viewHistoryItem(3)"
+                  >
+                    <div class="flex items-start gap-4">
+                      <div
+                        class="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center flex-shrink-0"
+                      >
+                        <svg
+                          class="w-5 h-5 text-purple-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewbox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                          />
+                        </svg>
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <div
+                          class="flex items-center justify-between gap-2 mb-1"
+                        >
+                          <h3 class="font-semibold text-slate-800 truncate">
+                            Remote Work Productivity Tips
+                          </h3>
+                          <span class="text-xs text-slate-400 whitespace-nowrap"
+                            >3 days ago</span
+                          >
+                        </div>
+                        <p class="text-sm text-slate-500 line-clamp-2 mb-2">
+                          Essential strategies for maintaining productivity
+                          while working from home...
+                        </p>
+                        <div class="flex items-center gap-4">
+                          <span
+                            class="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-full"
+                            >Summary</span
+                          >
+                          <span class="text-xs text-slate-400"
+                            >1,200 → 180 words</span
+                          >
+                        </div>
+                      </div>
+                      <svg
+                        class="w-5 h-5 text-slate-300 flex-shrink-0"
+                        fill="none"
+                        stroke="currentColor"
+                        viewbox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                  <!-- History Item 4 -->
+                  <div
+                    class="history-item p-4 lg:p-5 cursor-pointer"
+                    onclick="viewHistoryItem(4)"
+                  >
+                    <div class="flex items-start gap-4">
+                      <div
+                        class="w-10 h-10 rounded-xl bg-cyan-100 flex items-center justify-center flex-shrink-0"
+                      >
+                        <svg
+                          class="w-5 h-5 text-cyan-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewbox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                          />
+                        </svg>
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <div
+                          class="flex items-center justify-between gap-2 mb-1"
+                        >
+                          <h3 class="font-semibold text-slate-800 truncate">
+                            Social Media Marketing Strategy 2024
+                          </h3>
+                          <span class="text-xs text-slate-400 whitespace-nowrap"
+                            >1 week ago</span
+                          >
+                        </div>
+                        <p class="text-sm text-slate-500 line-clamp-2 mb-2">
+                          Latest trends and strategies for effective social
+                          media marketing...
+                        </p>
+                        <div class="flex items-center gap-4">
+                          <span
+                            class="px-2 py-1 bg-cyan-100 text-cyan-700 text-xs font-medium rounded-full"
+                            >SEO Analysis</span
+                          >
+                          <span class="text-xs text-slate-400"
+                            >Score: 92/100</span
+                          >
+                        </div>
+                      </div>
+                      <svg
+                        class="w-5 h-5 text-slate-300 flex-shrink-0"
+                        fill="none"
+                        stroke="currentColor"
+                        viewbox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+                <!-- Pagination -->
+                <div
+                  class="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between"
+                >
+                  <p class="text-sm text-slate-500">
+                    Showing 1-4 of 24 analyses
+                  </p>
+                  <div class="flex items-center gap-2">
+                    <button
+                      class="p-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-50"
+                      disabled
+                    >
+                      <svg
+                        class="w-4 h-4 text-slate-500"
+                        fill="none"
+                        stroke="currentColor"
+                        viewbox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M15 19l-7-7 7-7"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      class="px-3 py-1 bg-indigo-600 text-white rounded-lg text-sm font-medium"
+                    >
+                      1
+                    </button>
+                    <button
+                      class="px-3 py-1 bg-white border border-slate-200 text-slate-600 rounded-lg text-sm font-medium hover:bg-slate-50"
+                    >
+                      2
+                    </button>
+                    <button
+                      class="px-3 py-1 bg-white border border-slate-200 text-slate-600 rounded-lg text-sm font-medium hover:bg-slate-50"
+                    >
+                      3
+                    </button>
+                    <button
+                      class="p-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-50"
+                    >
+                      <svg
+                        class="w-4 h-4 text-slate-500"
+                        fill="none"
+                        stroke="currentColor"
+                        viewbox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- ACCOUNT PAGE -->
+        <section id="page-account" class="page-section hidden">
+          <div class="min-h-screen bg-slate-50 pt-24 lg:pt-28 pb-12">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+              <h1 class="text-2xl lg:text-3xl font-bold text-slate-900 mb-8">
+                Account Settings
+              </h1>
+              <div class="space-y-6">
+                <!-- Profile Section -->
+                <div class="glass-card rounded-2xl p-6 shadow-xl">
+                  <h2 class="text-lg font-bold text-slate-800 mb-6">
+                    Profile Information
+                  </h2>
+                  <form id="profile-form" onsubmit="saveProfile(event)">
+                    <div
+                      class="flex flex-col sm:flex-row gap-6 items-start mb-6"
+                    >
+                      <div class="relative">
+                        <div
+                          class="w-20 h-20 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-2xl font-bold"
+                        >
+                          JD
+                        </div>
+                        <button
+                          type="button"
+                          class="absolute -bottom-1 -right-1 w-7 h-7 bg-white border border-slate-200 rounded-full flex items-center justify-center shadow hover:bg-slate-50"
+                        >
+                          <svg
+                            class="w-4 h-4 text-slate-500"
+                            fill="none"
+                            stroke="currentColor"
+                            viewbox="0 0 24 24"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+                            />
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                      <div class="flex-1 grid sm:grid-cols-2 gap-4 w-full">
+                        <div>
+                          <label
+                            for="first-name"
+                            class="block text-sm font-medium text-slate-700 mb-1"
+                            >First Name</label
+                          >
+                          <input
+                            type="text"
+                            id="first-name"
+                            value="John"
+                            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none input-focus"
+                          />
+                        </div>
+                        <div>
+                          <label
+                            for="last-name"
+                            class="block text-sm font-medium text-slate-700 mb-1"
+                            >Last Name</label
+                          >
+                          <input
+                            type="text"
+                            id="last-name"
+                            value="Doe"
+                            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none input-focus"
+                          />
+                        </div>
+                        <div class="sm:col-span-2">
+                          <label
+                            for="profile-email"
+                            class="block text-sm font-medium text-slate-700 mb-1"
+                            >Email Address</label
+                          >
+                          <input
+                            type="email"
+                            id="profile-email"
+                            value="john@example.com"
+                            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none input-focus"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="flex justify-end">
+                      <button
+                        type="submit"
+                        class="btn-primary px-6 py-2.5 text-white font-semibold rounded-xl"
+                      >
+                        Save Changes
+                      </button>
+                    </div>
+                  </form>
+                </div>
+                <!-- Subscription Section -->
+                <div class="glass-card rounded-2xl p-6 shadow-xl">
+                  <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-lg font-bold text-slate-800">
+                      Subscription
+                    </h2>
+                    <span
+                      class="px-3 py-1 bg-indigo-100 text-indigo-700 font-semibold rounded-full text-sm"
+                      >Pro Plan</span
+                    >
+                  </div>
+                  <div class="grid sm:grid-cols-3 gap-4 mb-6">
+                    <div class="bg-slate-50 rounded-xl p-4">
+                      <p class="text-sm text-slate-500 mb-1">Next Billing</p>
+                      <p class="font-semibold text-slate-800">Dec 15, 2024</p>
+                    </div>
+                    <div class="bg-slate-50 rounded-xl p-4">
+                      <p class="text-sm text-slate-500 mb-1">Amount</p>
+                      <p class="font-semibold text-slate-800">$19/month</p>
+                    </div>
+                    <div class="bg-slate-50 rounded-xl p-4">
+                      <p class="text-sm text-slate-500 mb-1">Analyses Left</p>
+                      <p class="font-semibold text-slate-800">26 / 50</p>
+                    </div>
+                  </div>
+                  <div class="flex flex-col sm:flex-row gap-3">
+                    <button
+                      onclick="navigateTo('pricing')"
+                      class="px-5 py-2.5 bg-indigo-100 text-indigo-700 font-semibold rounded-xl hover:bg-indigo-200 transition-colors"
+                    >
+                      Upgrade Plan
+                    </button>
+                    <button
+                      class="px-5 py-2.5 text-slate-600 hover:text-slate-800 font-medium transition-colors"
+                    >
+                      Cancel Subscription
+                    </button>
+                  </div>
+                </div>
+                <!-- Privacy Notice -->
+                <div
+                  class="bg-gradient-to-br from-slate-100 to-slate-50 rounded-2xl p-6 border border-slate-200"
+                >
+                  <div class="flex items-start gap-4">
+                    <div
+                      class="w-10 h-10 rounded-xl bg-slate-200 flex items-center justify-center flex-shrink-0"
+                    >
+                      <svg
+                        class="w-5 h-5 text-slate-600"
+                        fill="none"
+                        stroke="currentColor"
+                        viewbox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                        />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 class="font-semibold text-slate-800 mb-1">
+                        Your Privacy Matters
+                      </h3>
+                      <p class="text-sm text-slate-600">
+                        Your content is never stored or used for AI training.
+                        All analysis is processed in real-time and immediately
+                        discarded. We are fully GDPR compliant and follow
+                        industry best practices for data protection.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+      <!-- Auth Modals -->
+      <!-- Login Modal -->
+      <div
+        id="login-modal"
+        class="hidden fixed inset-0 z-50 flex items-center justify-center p-4"
+      >
+        <div
+          class="modal-backdrop absolute inset-0"
+          onclick="closeModals()"
+        ></div>
+        <div
+          class="relative bg-white rounded-3xl shadow-2xl w-full max-w-md p-8 animate-scale-in"
+        >
+          <button
+            onclick="closeModals()"
+            class="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewbox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+          <div class="text-center mb-8">
+            <div
+              class="w-14 h-14 mx-auto rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mb-4 shadow-lg shadow-indigo-500/30"
+            >
+              <svg
+                class="w-7 h-7 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewbox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                />
+              </svg>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-900">Welcome Back</h2>
+            <p class="text-slate-500 mt-1">
+              Sign in to continue to ContentCraft
+            </p>
+          </div>
+          <form id="login-form" onsubmit="handleLogin(event)">
+            <div class="space-y-4">
+              <div>
+                <label
+                  for="login-email"
+                  class="block text-sm font-medium text-slate-700 mb-1"
+                  >Email Address</label
+                >
+                <input
+                  type="email"
+                  id="login-email"
+                  required
+                  class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none input-focus"
+                  placeholder="you@example.com"
+                />
+              </div>
+              <div>
+                <label
+                  for="login-password"
+                  class="block text-sm font-medium text-slate-700 mb-1"
+                  >Password</label
+                >
+                <input
+                  type="password"
+                  id="login-password"
+                  required
+                  class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none input-focus"
+                  placeholder="••••••••"
+                />
+              </div>
+            </div>
+            <button
+              type="submit"
+              class="w-full btn-primary py-3.5 text-white font-semibold rounded-xl mt-6"
+            >
+              Sign In
+            </button>
+          </form>
+          <p class="text-center text-sm text-slate-500 mt-6">
+            Don't have an account?
+            <button
+              onclick="showSignupModal()"
+              class="text-indigo-600 font-semibold hover:text-indigo-700"
+            >
+              Sign up free
+            </button>
+          </p>
+        </div>
+      </div>
+      <!-- Signup Modal -->
+      <div
+        id="signup-modal"
+        class="hidden fixed inset-0 z-50 flex items-center justify-center p-4"
+      >
+        <div
+          class="modal-backdrop absolute inset-0"
+          onclick="closeModals()"
+        ></div>
+        <div
+          class="relative bg-white rounded-3xl shadow-2xl w-full max-w-md p-8 animate-scale-in"
+        >
+          <button
+            onclick="closeModals()"
+            class="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewbox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+          <div class="text-center mb-8">
+            <div
+              class="w-14 h-14 mx-auto rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mb-4 shadow-lg shadow-indigo-500/30"
+            >
+              <svg
+                class="w-7 h-7 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewbox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
+                />
+              </svg>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-900">Create Account</h2>
+            <p class="text-slate-500 mt-1">Start your free trial today</p>
+          </div>
+          <form id="signup-form" onsubmit="handleSignup(event)">
+            <div class="space-y-4">
+              <div>
+                <label
+                  for="signup-name"
+                  class="block text-sm font-medium text-slate-700 mb-1"
+                  >Full Name</label
+                >
+                <input
+                  type="text"
+                  id="signup-name"
+                  required
+                  class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none input-focus"
+                  placeholder="John Doe"
+                />
+              </div>
+              <div>
+                <label
+                  for="signup-email"
+                  class="block text-sm font-medium text-slate-700 mb-1"
+                  >Email Address</label
+                >
+                <input
+                  type="email"
+                  id="signup-email"
+                  required
+                  class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none input-focus"
+                  placeholder="you@example.com"
+                />
+              </div>
+              <div>
+                <label
+                  for="signup-password"
+                  class="block text-sm font-medium text-slate-700 mb-1"
+                  >Password</label
+                >
+                <input
+                  type="password"
+                  id="signup-password"
+                  required
+                  class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none input-focus"
+                  placeholder="••••••••"
+                />
+              </div>
+            </div>
+            <button
+              type="submit"
+              class="w-full btn-primary py-3.5 text-white font-semibold rounded-xl mt-6"
+            >
+              Create Free Account
+            </button>
+          </form>
+          <p class="text-center text-sm text-slate-500 mt-6">
+            Already have an account?
+            <button
+              onclick="showLoginModal()"
+              class="text-indigo-600 font-semibold hover:text-indigo-700"
+            >
+              Sign in
+            </button>
+          </p>
+          <p class="text-center text-xs text-slate-400 mt-4">
+            By signing up, you agree to our Terms of Service and Privacy Policy
+          </p>
+        </div>
+      </div>
+      <!-- Toast Notification -->
+      <div
+        id="toast"
+        class="hidden fixed bottom-6 right-6 z-50 animate-fade-up"
+      >
+        <div
+          class="bg-slate-800 text-white px-5 py-3 rounded-xl shadow-xl flex items-center gap-3"
+        >
+          <svg
+            id="toast-icon"
+            class="w-5 h-5 text-emerald-400"
+            fill="none"
+            stroke="currentColor"
+            viewbox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 13l4 4L19 7"
+            /></svg
+          ><span id="toast-message">Success!</span>
+        </div>
+      </div>
+    </div>
+    <script>
+      // Default configuration
+      const defaultConfig = {
+        brand_name: "ContentCraft",
+        tagline: "AI-Powered Content Intelligence",
+        hero_title: "Transform Content Into Intelligence",
+        hero_subtitle:
+          "Summarize articles, analyze SEO performance, and optimize your content strategy with our advanced AI tools. Get actionable insights in seconds.",
+        primary_cta: "Start Free Analysis",
+        primary_color: "#6366f1",
+        secondary_color: "#8b5cf6",
+        text_color: "#1e293b",
+        background_color: "#f8fafc",
+        accent_color: "#06b6d4",
+      };
+
+      let config = { ...defaultConfig };
+      let currentPage = "home";
+      let currentTab = "summarize";
+      let isLoggedIn = false;
+      let isProcessing = false;
+      let billingAnnual = false;
+
+      // Initialize SDK
+      if (window.elementSdk) {
+        window.elementSdk.init({
+          defaultConfig,
+          onConfigChange: async (newConfig) => {
+            config = { ...defaultConfig, ...newConfig };
+            applyConfig();
+          },
+          mapToCapabilities: (cfg) => ({
+            recolorables: [
+              {
+                get: () => cfg.primary_color || defaultConfig.primary_color,
+                set: (v) => {
+                  cfg.primary_color = v;
+                  window.elementSdk.setConfig({ primary_color: v });
+                },
+              },
+              {
+                get: () =>
+                  cfg.background_color || defaultConfig.background_color,
+                set: (v) => {
+                  cfg.background_color = v;
+                  window.elementSdk.setConfig({ background_color: v });
+                },
+              },
+              {
+                get: () => cfg.text_color || defaultConfig.text_color,
+                set: (v) => {
+                  cfg.text_color = v;
+                  window.elementSdk.setConfig({ text_color: v });
+                },
+              },
+            ],
+            borderables: [],
+            fontEditable: undefined,
+            fontSizeable: undefined,
+          }),
+          mapToEditPanelValues: (cfg) =>
+            new Map([
+              ["brand_name", cfg.brand_name || defaultConfig.brand_name],
+              ["tagline", cfg.tagline || defaultConfig.tagline],
+              ["hero_title", cfg.hero_title || defaultConfig.hero_title],
+              [
+                "hero_subtitle",
+                cfg.hero_subtitle || defaultConfig.hero_subtitle,
+              ],
+              ["primary_cta", cfg.primary_cta || defaultConfig.primary_cta],
+            ]),
+        });
+      }
+
+      // Apply configuration to UI
+      function applyConfig() {
+        const brandName = config.brand_name || defaultConfig.brand_name;
+        const heroTitle = config.hero_title || defaultConfig.hero_title;
+        const heroSubtitle =
+          config.hero_subtitle || defaultConfig.hero_subtitle;
+        const primaryCta = config.primary_cta || defaultConfig.primary_cta;
+
+        document.getElementById("brand-name").textContent = brandName;
+        document.getElementById("hero-title").innerHTML = heroTitle.replace(
+          "Intelligence",
+          '<span class="bg-gradient-to-r from-indigo-600 via-purple-600 to-cyan-500 bg-clip-text text-transparent animate-gradient">Intelligence</span>',
+        );
+        document.getElementById("hero-subtitle").textContent = heroSubtitle;
+        document.getElementById("primary-cta").childNodes[0].textContent =
+          primaryCta + " ";
+      }
+
+      // Navigation
+      function navigateTo(page) {
+        document
+          .querySelectorAll(".page-section")
+          .forEach((p) => p.classList.add("hidden"));
+        document.getElementById(`page-${page}`).classList.remove("hidden");
+        currentPage = page;
+        window.scrollTo(0, 0);
+
+        // Update navbar style
+        updateNavbar();
+
+        // Close any dropdowns
+        closeUserDropdown();
+      }
+
+      function updateNavbar() {
+        const navbar = document.getElementById("navbar");
+        if (currentPage === "home") {
+          navbar.classList.remove("bg-white/95", "shadow-sm");
+          navbar.classList.add("bg-transparent");
+        } else {
+          navbar.classList.add("bg-white/95", "shadow-sm");
+          navbar.classList.remove("bg-transparent");
+        }
+      }
+
+      // Mobile menu
+      function toggleMobileMenu() {
+        const menu = document.getElementById("mobile-menu");
+        const overlay = document.getElementById("mobile-overlay");
+        menu.classList.toggle("open");
+        overlay.classList.toggle("hidden");
+      }
+
+      // User dropdown
+      function toggleUserDropdown() {
+        document.getElementById("user-dropdown").classList.toggle("hidden");
+      }
+
+      function closeUserDropdown() {
+        document.getElementById("user-dropdown").classList.add("hidden");
+      }
+
+      // Auth modals
+      function showLoginModal() {
+        closeModals();
+        document.getElementById("login-modal").classList.remove("hidden");
+      }
+
+      function showSignupModal() {
+        closeModals();
+        document.getElementById("signup-modal").classList.remove("hidden");
+      }
+
+      function closeModals() {
+        document.getElementById("login-modal").classList.add("hidden");
+        document.getElementById("signup-modal").classList.add("hidden");
+      }
+
+      function handleLogin(e) {
+        e.preventDefault();
+        const email = document.getElementById("login-email").value;
+        const name = email.split("@")[0];
+        loginUser(name, email);
+        closeModals();
+        showToast("Welcome back!");
+      }
+
+      function handleSignup(e) {
+        e.preventDefault();
+        const name = document.getElementById("signup-name").value;
+        const email = document.getElementById("signup-email").value;
+        loginUser(name, email);
+        closeModals();
+        showToast("Account created successfully!");
+      }
+
+      function loginUser(name, email) {
+        isLoggedIn = true;
+        const initials = name
+          .split(" ")
+          .map((n) => n[0])
+          .join("")
+          .toUpperCase()
+          .slice(0, 2);
+
+        document.getElementById("login-nav-btn").classList.add("hidden");
+        document.getElementById("signup-nav-btn").classList.add("hidden");
+        document.getElementById("user-menu").classList.remove("hidden");
+
+        document.getElementById("user-avatar").textContent = initials;
+        document.getElementById("user-display-name").textContent = name;
+        document.getElementById("dropdown-name").textContent = name;
+        document.getElementById("dropdown-email").textContent = email;
+      }
+
+      function logout() {
+        isLoggedIn = false;
+        document.getElementById("login-nav-btn").classList.remove("hidden");
+        document.getElementById("signup-nav-btn").classList.remove("hidden");
+        document.getElementById("user-menu").classList.add("hidden");
+        closeUserDropdown();
+        navigateTo("home");
+        showToast("Signed out successfully");
+      }
+
+      // Dashboard functionality
+      function switchAnalysisTab(tab) {
+        currentTab = tab;
+
+        document.getElementById("tab-summarize").className =
+          tab === "summarize"
+            ? "px-6 py-3 rounded-xl font-semibold text-sm transition-all bg-gradient-to-r from-indigo-500 to-purple-600 text-white"
+            : "px-6 py-3 rounded-xl font-semibold text-sm transition-all text-slate-600 hover:text-slate-900";
+
+        document.getElementById("tab-seo").className =
+          tab === "seo"
+            ? "px-6 py-3 rounded-xl font-semibold text-sm transition-all bg-gradient-to-r from-indigo-500 to-purple-600 text-white"
+            : "px-6 py-3 rounded-xl font-semibold text-sm transition-all text-slate-600 hover:text-slate-900";
+
+        // Update results view if visible
+        if (
+          !document.getElementById("results-panel").classList.contains("hidden")
+        ) {
+          document
+            .getElementById("summarize-results")
+            .classList.toggle("hidden", tab !== "summarize");
+          document
+            .getElementById("seo-results")
+            .classList.toggle("hidden", tab !== "seo");
+        }
+      }
+
+      function loadSampleContent() {
+        const sampleContent = `The Future of AI in Content Marketing
+
+Artificial intelligence is rapidly transforming how businesses approach content marketing. From automated content creation to sophisticated audience analysis, AI tools are helping marketers work smarter and achieve better results.
+
+One of the most significant developments is the rise of natural language processing (NLP) technologies. These tools can analyze vast amounts of text data to identify trends, extract insights, and even generate human-like content. For content marketers, this means being able to produce more content in less time while maintaining quality standards.
+
+SEO optimization has also been revolutionized by AI. Modern algorithms can analyze search patterns, predict ranking factors, and provide actionable recommendations for improving content visibility. This has made SEO more accessible to businesses of all sizes, democratizing access to organic search traffic.
+
+However, it's important to note that AI should be viewed as a tool to augment human creativity, not replace it. The most successful content strategies combine AI efficiency with human insight and emotional intelligence. This hybrid approach ensures content remains authentic and engaging while benefiting from data-driven optimization.
+
+Looking ahead, we can expect AI to play an even larger role in content personalization. As machine learning models become more sophisticated, they'll be able to deliver increasingly tailored content experiences to individual users, improving engagement and conversion rates.
+
+For marketers looking to stay competitive, embracing AI tools is no longer optional—it's essential. The key is to start experimenting with these technologies now, learning what works for your specific audience and goals, and continuously adapting your strategy based on results.`;
+
+        document.getElementById("content-input").value = sampleContent;
+        updateCounts();
+      }
+
+      function clearInput() {
+        document.getElementById("content-input").value = "";
+        updateCounts();
+        document.getElementById("results-panel").classList.add("hidden");
+      }
+
+      function updateCounts() {
+        const text = document.getElementById("content-input").value;
+        const charCount = text.length;
+        const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
+
+        document.getElementById("char-count").textContent =
+          `${charCount.toLocaleString()} characters`;
+        document.getElementById("word-count").textContent =
+          `${wordCount.toLocaleString()} words`;
+      }
+
+      document
+        .getElementById("content-input")
+        .addEventListener("input", updateCounts);
+
+      async function analyzeContent() {
+        const content = document.getElementById("content-input").value.trim();
+        if (!content) {
+          showToast("Please enter some content to analyze", "error");
+          return;
+        }
+
+        if (isProcessing) return;
+        isProcessing = true;
+
+        const btn = document.getElementById("analyze-btn");
+        const btnText = document.getElementById("analyze-btn-text");
+        btnText.innerHTML =
+          '<span class="flex items-center gap-2"><span class="processing-dot w-1.5 h-1.5 bg-white rounded-full"></span><span class="processing-dot w-1.5 h-1.5 bg-white rounded-full"></span><span class="processing-dot w-1.5 h-1.5 bg-white rounded-full"></span> Analyzing...</span>';
+        btn.disabled = true;
+
+        // Simulate AI processing
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+
+        // Show results
+        document.getElementById("results-panel").classList.remove("hidden");
+        document
+          .getElementById("summarize-results")
+          .classList.toggle("hidden", currentTab !== "summarize");
+        document
+          .getElementById("seo-results")
+          .classList.toggle("hidden", currentTab !== "seo");
+
+        // Update stats based on content
+        const words = content.trim().split(/\s+/).length;
+        const summaryWords = Math.round(words * 0.14);
+        const reduction = Math.round((1 - summaryWords / words) * 100);
+        const readTime = Math.ceil(summaryWords / 200);
+
+        document.getElementById("original-words").textContent =
+          words.toLocaleString();
+        document.getElementById("summary-words").textContent = summaryWords;
+        document.getElementById("reduction-percent").textContent =
+          reduction + "%";
+        document.getElementById("read-time").textContent = `~${readTime} min`;
+
+        document.getElementById("stat-words").textContent =
+          words.toLocaleString();
+        document.getElementById("stat-sentences").textContent = Math.round(
+          words / 20,
+        );
+        document.getElementById("stat-paragraphs").textContent =
+          content.split(/\n\n+/).length;
+        document.getElementById("stat-reading").textContent =
+          `~${Math.ceil(words / 200)} min`;
+
+        // Animate SEO score ring
+        const ring = document.getElementById("seo-score-ring");
+        ring.classList.add("animated");
+
+        btnText.textContent = "Analyze Content";
+        btn.disabled = false;
+        isProcessing = false;
+
+        showToast("Analysis complete!");
+      }
+
+      function copySummary() {
+        const summary = document.getElementById("full-summary").textContent;
+        navigator.clipboard.writeText(summary).then(() => {
+          showToast("Summary copied to clipboard!");
+        });
+      }
+
+      function exportReport(type) {
+        showToast(`${type === "seo" ? "SEO" : "Summary"} report exported!`);
+      }
+
+      // Pricing
+      function toggleBilling() {
+        billingAnnual = !billingAnnual;
+        const indicator = document.getElementById("billing-indicator");
+        const monthlyLabel = document.getElementById("monthly-label");
+        const yearlyLabel = document.getElementById("yearly-label");
+
+        indicator.style.transform = billingAnnual
+          ? "translateX(28px)"
+          : "translateX(0)";
+        document
+          .getElementById("billing-toggle")
+          .classList.toggle("bg-indigo-500", billingAnnual);
+        document
+          .getElementById("billing-toggle")
+          .classList.toggle("bg-slate-200", !billingAnnual);
+
+        monthlyLabel.classList.toggle("text-slate-900", !billingAnnual);
+        monthlyLabel.classList.toggle("text-slate-500", billingAnnual);
+        yearlyLabel.classList.toggle("text-slate-900", billingAnnual);
+        yearlyLabel.classList.toggle("text-slate-500", !billingAnnual);
+
+        document
+          .querySelectorAll(".price-monthly")
+          .forEach((el) => el.classList.toggle("hidden", billingAnnual));
+        document
+          .querySelectorAll(".price-yearly")
+          .forEach((el) => el.classList.toggle("hidden", !billingAnnual));
+      }
+
+      function toggleFaq(btn) {
+        const content = btn.nextElementSibling;
+        const icon = btn.querySelector("svg");
+        content.classList.toggle("hidden");
+        icon.style.transform = content.classList.contains("hidden")
+          ? "rotate(0deg)"
+          : "rotate(180deg)";
+      }
+
+      // History
+      function viewHistoryItem(id) {
+        navigateTo("dashboard");
+        loadSampleContent();
+        showToast("Analysis loaded from history");
+      }
+
+      // Account
+      function saveProfile(e) {
+        e.preventDefault();
+        showToast("Profile updated successfully!");
+      }
+
+      // Toast notifications
+      function showToast(message, type = "success") {
+        const toast = document.getElementById("toast");
+        const toastMessage = document.getElementById("toast-message");
+        const toastIcon = document.getElementById("toast-icon");
+
+        toastMessage.textContent = message;
+
+        if (type === "error") {
+          toastIcon.innerHTML =
+            '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>';
+          toastIcon.classList.remove("text-emerald-400");
+          toastIcon.classList.add("text-red-400");
+        } else {
+          toastIcon.innerHTML =
+            '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>';
+          toastIcon.classList.remove("text-red-400");
+          toastIcon.classList.add("text-emerald-400");
+        }
+
+        toast.classList.remove("hidden");
+
+        setTimeout(() => {
+          toast.classList.add("hidden");
+        }, 3000);
+      }
+
+      // Scroll handling for navbar
+      let lastScroll = 0;
+      window.addEventListener("scroll", () => {
+        const navbar = document.getElementById("navbar");
+        const currentScroll = window.scrollY;
+
+        if (currentPage === "home") {
+          if (currentScroll > 50) {
+            navbar.classList.add("bg-white/95", "shadow-sm");
+            navbar.classList.remove("bg-transparent");
+          } else {
+            navbar.classList.remove("bg-white/95", "shadow-sm");
+            navbar.classList.add("bg-transparent");
+          }
+        }
+
+        lastScroll = currentScroll;
+      });
+
+      // Close dropdown when clicking outside
+      document.addEventListener("click", (e) => {
+        if (!e.target.closest("#user-menu")) {
+          closeUserDropdown();
+        }
+      });
+
+      // Initial setup
+      applyConfig();
+      updateNavbar();
+    </script>
+    <script>
+      (function () {
+        function c() {
+          var b = a.contentDocument || a.contentWindow.document;
+          if (b) {
+            var d = b.createElement("script");
+            d.innerHTML =
+              "window.__CF$cv$params={r:'9c929bc635285456',t:'MTc3MDI5NjYxMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";
+            b.getElementsByTagName("head")[0].appendChild(d);
+          }
+        }
+        if (document.body) {
+          var a = document.createElement("iframe");
+          a.height = 1;
+          a.width = 1;
+          a.style.position = "absolute";
+          a.style.top = 0;
+          a.style.left = 0;
+          a.style.border = "none";
+          a.style.visibility = "hidden";
+          document.body.appendChild(a);
+          if ("loading" !== document.readyState) c();
+          else if (window.addEventListener)
+            document.addEventListener("DOMContentLoaded", c);
+          else {
+            var e = document.onreadystatechange || function () {};
+            document.onreadystatechange = function (b) {
+              e(b);
+              "loading" !== document.readyState &&
+                ((document.onreadystatechange = e), c());
+            };
+          }
+        }
+      })();
+    </script>
+  </body>
+</html>
